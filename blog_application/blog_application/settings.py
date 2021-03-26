@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/3.1/ref/settings/
 """
 
 from pathlib import Path
+import django_heroku
 import os
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -21,12 +22,12 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/3.1/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = "m5*ga*o=ir@0l720((md=y^4_*rb!7+5c#-lx!z*=aq94igtbn"
-
+# SECRET_KEY = "m5*ga*o=ir@0l720((md=y^4_*rb!7+5c#-lx!z*=aq94igtbn"
+SECRET_KEY = os.environ.get("SECRET_KEY")
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = os.environ.get("DEBUG_VALUE") == "True"
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ["blog-application-2.herokuapp.com"]
 
 
 # Application definition
@@ -115,8 +116,9 @@ USE_TZ = True
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/3.1/howto/static-files/
-
+STATIC_ROOT = os.path.join(BASE_DIR, "staticfiles")
 STATIC_URL = "/static/"
+
 MEDIA_ROOT = os.path.join(BASE_DIR, "media")
 MEDIA_URL = "/media/"
 
@@ -142,3 +144,5 @@ AWS_S3_REGION_NAME = "us-east-2"  # change to your region
 AWS_S3_SIGNATURE_VERSION = "s3v4"
 DEFAULT_FILE_STORAGE = "storages.backends.s3boto3.S3Boto3Storage"
 # storages.backends.s3boto3.S3Boto3Storage
+
+django_heroku.settings(locals())
